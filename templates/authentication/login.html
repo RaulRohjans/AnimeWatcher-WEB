@@ -1,0 +1,102 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Anime Watcher - Login</title>
+    <link rel="icon" href="{% static 'favicon.png' %}" media="(prefers-color-scheme:no-preference)">
+    <link rel="icon" href="{% static 'favicon_white.png' %}"  media="(prefers-color-scheme:dark)">
+    <link rel="icon" href="{% static 'favicon_black.png' %}" media="(prefers-color-scheme:light)">
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="{% static 'authentication/fonts/material-icon/css/material-design-iconic-font.min.css' %}">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="{% static 'authentication/css/style.css' %}">
+
+    <style>
+        .form-submit:hover{
+            background: #d14b2a
+        }
+    </style>
+</head>
+<body background="{% static 'authentication/images/mangaLogin.jpg' %}">
+
+    <div class="main">
+
+    <!-- Sing in  Form -->
+        <section class="sign-in">
+            <div class="container">
+                <div class="signin-content">
+                    <div class="signin-image">
+                        <figure><img src="{% static 'authentication/images/animeLogin.png' %}" alt="sing up image"></figure>
+                        <a href="{%  url 'register' %}" class="signup-image-link">Create an account</a>
+                    </div>
+
+                    <div class="signin-form">
+                        <h2 class="form-title">Sign in</h2>
+                        <form method="POST" class="register-form" id="login-form">{% csrf_token %}
+                            <div class="form-group">
+                                <label for="username"><i class="zmdi zmdi-account material-icons-name" style="margin-left: 3px;"></i></label>
+                                <input type="text" name="username" id="username" placeholder="Username"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="password"><i class="zmdi zmdi-lock" style="margin-left: 3px;"></i></label>
+                                <input type="password" name="password" id="password" placeholder="Password"/>
+                            </div>
+
+                            <a href="{%  url 'forgot-password' %}" class="signup-image-link" style="text-align: left;">Forgot password?</a>
+
+                            <div class="form-group form-button" style="margin-top: 16px;">
+                                <input type="submit" name="signin" id="signin" class="form-submit" value="Log in"/>
+                            </div>
+                        </form>
+
+
+                        <div class="social-login">
+                            {{ form.errors }}
+                            {% for message in messages %}
+                                {% if message.extra_tags == 'error' %}
+                                    <p style="color: #ff3333;">{{message}}</p>
+                                {% else %}
+                                    <p style="color: #6fdc6f;">{{message}}</p>
+                                {% endif %}
+
+                            {% endfor %}
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- JS -->
+    <script src="{% static 'authentication/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'authentication/js/main.js' %}"></script>
+    <script>
+        $(document).ready(function() {
+            if (!window.matchMedia)
+                return;
+
+            var current = $('head > link[rel="icon"][media]');
+            $.each(current, function(i, icon) {
+                var match = window.matchMedia(icon.media);
+                function swap() {
+                    if (match.matches) {
+                        current.remove();
+                        current = $(icon).appendTo('head');
+                    }
+                }
+                match.addListener(swap);
+                swap();
+            });
+        });
+    </script>
+</body>
+</html>

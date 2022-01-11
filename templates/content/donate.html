@@ -1,0 +1,172 @@
+{% extends 'content/base.html' %}
+{% load static %}
+
+{% block content_entire %}
+<section class="container" style="margin-bottom: 16px;">
+    <h2>Donate</h2>
+</section>
+
+
+<main class="container">
+
+    <div class="row">
+        <div class="col-md-12  col-sm-12 col-xs-12">
+            <div style="margin-bottom: 64px;">
+                <h5>Enjoying the experience and want to donate? You can do so using the addresses below :)</h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 5%;">
+        <div class="col-sm">
+          <table class="table" >
+              <thead>
+                <tr>
+                    <th scope="col"><p class="style-center-grid-items">Bitcoin - BTC</p></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                    <td><img src="{% static 'content/Images/Donate/btc.png' %}" class="style-donation-image" alt='BTC'></td>
+                </tr>
+                <tr>
+                    <td><button type="button" value="1Fr4S3R9GqotjYmrCoXhVdY9BgB6d646Eh" class="btn btn-sm style-copy-donation-address">Copy Address</button></td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+
+        <div class="col-sm">
+          <table class="table" >
+              <thead>
+                <tr>
+                    <th scope="col"><p class="style-center-grid-items">Ethereum - ETH</p></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                    <td><img src="{% static 'content/Images/Donate/eth.png' %}" class="style-donation-image" alt='ETH'></td>
+                </tr>
+                <tr>
+                    <td><button type="button" value="0x2cf92f305648210d3d09b8da767b5074a21bcfab" class="btn btn-sm style-copy-donation-address">Copy Address</button></td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+
+        <div class="col-sm">
+          <table class="table" >
+              <thead>
+                <tr>
+                    <th scope="col"><p class="style-center-grid-items">Raven - RVN</p></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                    <td><img src="{% static 'content/Images/Donate/rvn.png' %}" class="style-donation-image" alt='RVN'></td>
+                </tr>
+                <tr>
+                    <td><button type="button" value="RCwUwAiJi5uFwN9xUKVEe4iCkgyuk5TYj6" class="btn btn-sm style-copy-donation-address">Copy Address</button></td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+  </div>
+
+    <div class="row" style="margin-bottom: 15%;">
+
+        <div class="col-sm">
+              <table class="table" >
+                  <thead>
+                    <tr>
+                        <th scope="col"><p class="style-center-grid-items">Dogecoin - DOGE</p></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                        <td><img src="{% static 'content/Images/Donate/doge.png' %}" class="style-donation-image" alt='DOGE'></td>
+                    </tr>
+                    <tr>
+                        <td><button type="button" value="DF9LLxQRvXzbtEfN8c5yMYzBiTLEzJnWsJ" class="btn btn-sm style-copy-donation-address">Copy Address</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+
+            <div class="col-sm">
+              <table class="table" >
+                  <thead>
+                    <tr>
+                        <th scope="col"><p class="style-center-grid-items">Litecoin - LTC</p></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                        <td><img src="{% static 'content/Images/Donate/ltc.png' %}" class="style-donation-image" alt='LTC'></td>
+                    </tr>
+                    <tr>
+                        <td><button type="button" value="Lh2ynmwXZRZ3EwqD1C7JAgXFzYZqGs1umi" class="btn btn-sm style-copy-donation-address">Copy Address</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+
+            <div class="col-sm">
+              <table class="table" >
+                  <thead>
+                    <tr>
+                        <th scope="col"><p class="style-center-grid-items">Monero - XMR</p></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                        <td><img src="{% static 'content/Images/Donate/xmr.png' %}" class="style-donation-image" alt='XMR'></td>
+                    </tr>
+                    <tr>
+                        <td><button type="button" value="83pBoTQSe14GhaXcy3hg9Q8PbNS3gjPXSNRJ48ETi5mu9HNGN1TwR89MEff7DB2F1AdSiLGoSZJGaeJt3eSN7s7w2FXA4iz" class="btn btn-sm style-copy-donation-address">Copy Address</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+
+    </div>
+
+</main>
+
+{% endblock %}
+
+{% block content_scripts %}
+<script>
+    $(".style-copy-donation-address").click(function(){
+        var value = getButtonValue($(this))
+        copyToClipboard(value)
+
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Address copied to clipboard!',
+          showConfirmButton: false,
+          timer: 1500
+        })
+
+    });
+
+    //Copy text to clipboard
+    function copyToClipboard(value) {
+      var $temp = $("<input>");
+      $("body").append($temp);
+      $temp.val(value).select();
+      document.execCommand("copy");
+      $temp.remove();
+    }
+
+    //Extract value from button
+    var getButtonValue = function($button) {
+        var label = $button.text();
+        $button.text('');
+        var buttonValue = $button.val();
+        $button.text(label);
+        return buttonValue;
+    }
+</script>
+{% endblock %}

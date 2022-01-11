@@ -1,0 +1,90 @@
+{% extends 'admin/base.html' %}
+
+{% block repcomments %}active{% endblock %}
+
+{% block content_main %}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Anime Submissions</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{%  url 'admin' %}">Dashboard</a></li>
+          <li class="breadcrumb-item">Anime</li>
+          <li class="breadcrumb-item">Submitted</li>
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <h2 class="text-center display-4">Submitted Animes Search</h2>
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <form role="search" method="get" action="">
+                    <div class="input-group">
+                        <input type="search" name="s" class="form-control form-control-lg" placeholder="Type the username here">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-lg btn-default">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main content -->
+<section class="content" style="margin-top: 60px;">
+  <div class="container-fluid">
+    <form method="post">{% csrf_token %}
+    <div class="row">
+      <div class="col-12">
+        <button type="submit" name="deleteCom" value="delete" class="btn btn-primary" style="background-color: #ff3333; border-color: #ff3333; margin-bottom: 16px;">Delete Comments</button>
+          <button type="submit" name="deleteRep" value="delete" class="btn btn-primary" style="background-color: #ff3333; border-color: #ff3333; margin-bottom: 16px;">Delete Reports</button>
+        <div class="card">
+          <div class="card-body table-responsive p-0">
+            <table class="table table-hover text-nowrap">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>ID</th>
+                  <th>Reported By</th>
+                  <th>Report Date</th>
+                  <th>Comment Author</th>
+                  <th>Episode</th>
+                  <th>Comment Text</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for obj in repCommentsObjs %}
+                    <tr>
+                      <td style="text-align: center;"><input type="checkbox" class="form-check-input" name="delete" value="{{ obj.mID }}"></td>
+                      <td>{{ obj.mID }}</td>
+                      <td>{{ obj.mUser.username }}</td>
+                      <td>{{ obj.mReportDate }}</td>
+                      <td>{{ obj.mComment.mUser.username }}</td>
+                      <td>{{ obj.mComment.mEpisode.mAnime.mNameEN }} Episode {{ obj.mComment.mEpisode.mEpisodeNumber }}</td>
+                      <td>{{ obj.mComment.mBody }}</td>
+                    </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+    </div>
+    </form>
+    <!-- /.row -->
+  </div><!-- /.container-fluid -->
+</section>
+{% endblock %}

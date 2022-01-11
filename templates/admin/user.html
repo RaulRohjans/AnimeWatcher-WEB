@@ -1,0 +1,110 @@
+{% extends 'admin/base.html' %}
+
+{% block edit_user %}active{% endblock %}
+
+{% block content_main %}
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Edit User: {{ userObj.username }}</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{%  url 'admin' %}">Dashboard</a></li>
+          <li class="breadcrumb-item"><a href="{%  url 'admin-user-all' %}">Users</a></li>
+          <li class="breadcrumb-item">Edit</li>
+          <li class="breadcrumb-item active">{{ userObj.username }}</li>
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- left column -->
+      <div class="col-md-6" style="flex: 0 0 100%; max-width: 100%;">
+        <!-- general form elements -->
+        <div class="card card-primary">
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form method="post">{% csrf_token %}
+              <div class="card-body">
+            <div class="row">
+                <div class="col-sm-6">
+                   <div class="form-group">
+                     <label>First Name</label>
+                     {% if userObj.first_name %}
+                        <input type="text" class="form-control" value="{{ userObj.first_name }}" placeholder="First Name" name="first_name">
+                     {% else %}
+                        <input type="text" class="form-control" placeholder="First Name" name="first_name">
+                     {% endif %}
+                   </div>
+                 </div>
+
+                 <div class="col-sm-6">
+                   <div class="form-group">
+                     <label>Last Name</label>
+                     {% if userObj.last_name %}
+                        <input type="text" class="form-control" value="{{ userObj.last_name }}" placeholder="Last Name" name="last_name">
+                     {% else %}
+                        <input type="text" class="form-control" placeholder="Last Name" name="last_name">
+                     {% endif %}
+                   </div>
+                 </div>
+           </div>
+
+              <div class="form-group">
+                <label for="username">Username<b style="color: red;">*</b></label>
+                <input type="text" class="form-control" id="username" value="{{ userObj.username }}" placeholder="Username" name="username">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Email address<b style="color: red;">*</b></label>
+                <input type="email" class="form-control" id="exampleInputEmail1" value="{{ userObj.email }}" placeholder="Enter email" name="email">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">New Password</label>
+                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="New Password" name="password1">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">Repeat New Password</label>
+                <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Repeat New Password" name="password2">
+              </div>
+
+              <div class="form-check">
+                {% if userObj.is_superuser %}
+                    <input type="checkbox" class="form-check-input" id="adminCheck1" name="adminCheck" checked>
+                    <label class="form-check-label" for="adminCheck1">Admin Account</label>
+                {% else %}
+                    <input type="checkbox" class="form-check-input" id="adminCheck2" name="adminCheck">
+                    <label class="form-check-label" for="adminCheck2">Admin Account</label>
+                {% endif %}
+              </div>
+
+                  {% for message in messages %}
+                {% if message.extra_tags == 'error' %}
+                    <p style="color: red; margin-top: 10px;">{{message}}</p>
+                {% else %}
+                    <p style="color: green; margin-top: 10px;">{{message}}</p>
+                {% endif %}
+            {% endfor %}
+            </div>
+            <!-- /.card-body -->
+
+
+            <div class="card-footer" style="margin-top: 25px;">
+              <button type="submit" name="save" value="save" class="btn btn-primary" style="margin-right: 84.5%">Save Settings</button>
+              <button type="submit" name="delete" value="delete" class="btn btn-primary" style="background-color: #ff3333; border-color: #ff3333;">Delete Account</button>
+            </div>
+          </form>
+        </div>
+        <!-- /.card -->
+      </div>
+    </div>
+    <!-- /.row -->
+  </div><!-- /.container-fluid -->
+</section>
+{% endblock %}

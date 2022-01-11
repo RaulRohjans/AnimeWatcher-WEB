@@ -1,0 +1,91 @@
+<!DO{% extends 'admin/base.html' %}
+
+{% block category %}active{% endblock %}
+
+{% block edit_category %}active{% endblock %}
+
+{% block open_category %}menu-open{% endblock %}
+
+{% block content_main %}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>All Category</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{%  url 'admin' %}">Dashboard</a></li>
+          <li class="breadcrumb-item">Category</li>
+          <li class="breadcrumb-item active">All</li>
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <h2 class="text-center display-4">Category Search</h2>
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <form role="search" method="get" action="">
+                    <div class="input-group">
+                        <input type="search" name="s" class="form-control form-control-lg" placeholder="Type the category name here">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-lg btn-default">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main content -->
+<section class="content" style="margin-top: 60px;">
+  <div class="container-fluid">
+
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body table-responsive p-0">
+            <table class="table table-hover text-nowrap">
+              <thead>
+                <tr>
+                  <th>Category Name</th>
+                  <th>Anime Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for obj in catObjs %}
+                    <tr class='clickable-row' data-href='/admin/category/edit/{{ obj.mCategoryName }}' style="cursor: pointer;">
+                      <td>{{ obj.mCategoryName|title }}</td>
+                      <td>{{ obj.mAnimeCount }}</td>
+                    </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+    </div>
+    <!-- /.row -->
+  </div><!-- /.container-fluid -->
+</section>
+{% endblock %}
+
+{% block content_script %}
+<script>
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+});
+</script>
+{% endblock %}

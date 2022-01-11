@@ -1,0 +1,46 @@
+{% extends 'content/base.html' %}
+
+{% block content_entire %}
+
+
+
+<div class="style-info-container">
+    <h2><span>Submit Anime</span></h2>
+    <p style="font-size: 18px;">Is there an anime, episode or season that our platform doesn't have yet? Tell us by filling out the form bellow and maybe we'll add it in the future!</p>
+</div>
+
+
+
+
+<div id="style-submitanime-wrapper">
+    <form method="POST">{% csrf_token %}
+
+        <div class="form-group">
+            <input type="text" class="form-control" id="exampleFormControlInput1" name="username" placeholder="Username" {% if request.user.is_authenticated %} value="{{ request.user.username }}" {% endif %}>
+        </div>
+
+        <div class="form-group">
+            <input type="email" class="form-control" id="exampleFormControlInput2" name="email" placeholder="name@example.com" {% if request.user.is_authenticated %} value="{{ request.user.email }}" {% endif %}>
+        </div>
+
+        <div class="form-group">
+            <input type="text" class="form-control" id="exampleFormControlInput3" placeholder="Anime/Episode Name" name="anime">
+        </div>
+
+        <div class="form-group">
+            <textarea class="form-control" name="description" placeholder="Description (optional)" style="resize: none;" id="exampleFormControlTextarea1" cols="40" rows="5"></textarea>
+        </div>
+
+        <button type="submit" value="Submit" id="style-btn-submitanime" class="btn">Submit</button>
+    </form>
+
+    {% for message in messages %}
+        {% if message.extra_tags == 'error' %}
+            <p style="color: red; margin-top: 16px;">{{message}}</p>
+        {% else %}
+            <p style="color: green; margin-top: 16px;">{{message}}</p>
+        {% endif %}
+    {% endfor %}
+</div>
+
+{% endblock %}

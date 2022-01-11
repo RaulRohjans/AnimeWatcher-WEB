@@ -1,0 +1,122 @@
+{% extends 'admin/base.html' %}
+
+{% block anime %}active{% endblock %}
+
+{% block edit_anime %}active{% endblock %}
+
+{% block open_anime %}menu-open{% endblock %}
+
+{% block content_main %}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Add New Anime</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{%  url 'admin' %}">Dashboard</a></li>
+          <li class="breadcrumb-item">Anime</li>
+            <li class="breadcrumb-item"><a href="{%  url 'admin-anime-all' %}">Edit</a></li>
+          <li class="breadcrumb-item active">{{ animeObj.mNameEN }}</li>
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- left column -->
+      <div class="col-md-6" style="flex: 0 0 100%; max-width: 100%;">
+        <!-- general form elements -->
+        <div class="card card-primary">
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form method="post" enctype="multipart/form-data">{% csrf_token %}
+              <div class="card-body">
+            <div class="row">
+                <div class="col-sm-6">
+                   <div class="form-group">
+                     <label>Name in English</label>
+                     <input type="text" class="form-control" value="{{ animeObj.mNameEN }}" placeholder="Name in English" name="nameEn" disabled>
+                   </div>
+                 </div>
+
+                 <div class="col-sm-6">
+                   <div class="form-group">
+                     <label>Name in Japanese</label>
+                     <input type="text" class="form-control" {% if animeObj.mNameJP %}value="{{ animeObj.mNameJP }}"{% endif %} placeholder="Name in Japanese" name="nameJP">
+                   </div>
+                 </div>
+           </div>
+
+              <div class="form-group">
+                <label for="description">Description<b style="color: red;">*</b></label>
+                <textarea name="description" id="description" style="resize: none;" cols="40" rows="5" class="form-control" aria-invalid="false" placeholder="Description" required>{{ animeObj.mDescription }}</textarea>
+              </div>
+
+              <div class="form-group" style="margin-top: 14px;">
+                <label>Thumbnail<b style="color: red;">*</b></label>
+                <input type="text" class="form-control" value="{{ animeObj.mThumbnail }}" name="thumbnail" placeholder="https://host.com/image.png" required>
+              </div>
+
+              <div class="form-group" style="margin-top: 16px;">
+                    <label>Categories<b style="color: red;">*</b></label>
+                  <div class="selecCats">
+                    <select multiple class="custom-select" name="categories" required>
+                        {% for catObj in catObjs %}
+                            <option value="{{ catObj.mCategoryName }}">{{ catObj.mCategoryName }}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+              </div>
+
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="onGoing" name="onGoing" {% if animeObj.mOnGoing %}checked{% endif %}>
+                <label class="form-check-label" for="onGoing">On Going</label>
+              </div>
+                  {% for message in messages %}
+                {% if message.extra_tags == 'error' %}
+                    <p style="color: red; margin-top: 10px;">{{message}}</p>
+                {% else %}
+                    <p style="color: green; margin-top: 10px;">{{message}}</p>
+                {% endif %}
+            {% endfor %}
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer" style="margin-top: 25px;">
+              <button type="submit" name="save" value="save" class="btn btn-primary" style="margin-right: 86%">Save Anime</button>
+              <button type="submit" name="delete" value="delete" class="btn btn-primary" style="background-color: #ff3333; border-color: #ff3333;">Delete Anime</button>
+            </div>
+          </form>
+        </div>
+        <!-- /.card -->
+      </div>
+    </div>
+    <!-- /.row -->
+  </div><!-- /.container-fluid -->
+</section>
+{% endblock %}
+
+{% block content_script %}
+<script>
+$(function () {
+  bsCustomFileInput.init();
+});
+</script>
+
+<script>
+{% for animeCatObj in animeCatObjs %}
+    $("div.selecCats select").val("{{ animeCatObj.mCategoryName}}").change();
+{% endfor %}
+</script>
+
+<script>
+document.getElementById("id_ThumbNail").required = false
+</script>
+{% endblock %}

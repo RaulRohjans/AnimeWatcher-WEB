@@ -1,0 +1,22 @@
+{% extends 'content/base.html' %}
+{% load static %}
+
+{% block content_entire %}
+<h5 style="margin-left: 2%;">Has total {{ qtdCat }} categories</h5>
+<hr class="style-menus-hr">
+
+<div class="container" style="margin-top: 3%;">
+    {% for obj in objs %}
+        {% if forloop.counter0 == 0 %}
+            <div class="row" style="margin-bottom: 15%;">
+        {% elif forloop.counter0|divisibleby:"3" == True %}
+            </div>
+            <div class="row" style="margin-bottom: 15%;">
+        {% endif %}
+            <div class="col-sm">
+                <button type="button" class="btn btn-block btn-lg style-categories-selector-buttons" onclick="window.location.href='{{ obj.mCategoryName }}'">{{ obj.mCategoryName|title }}</button>
+            </div>
+    {% endfor%}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends 'admin/base.html' %}
+
+{% block category %}
+active
+{% endblock %}
+
+{% block edit_category %}
+active
+{% endblock %}
+
+{% block open_category %}
+menu-open
+{% endblock %}
+
+{% block content_main %}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Add New Category</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{%  url 'admin' %}">Dashboard</a></li>
+          <li class="breadcrumb-item"><a href="{%  url 'admin-category-all' %}">Categories</a></li>
+          <li class="breadcrumb-item">Delete</li>
+          <li class="breadcrumb-item active">{{ catObj.mCategoryName }}</li>
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- left column -->
+      <div class="col-md-6" style="flex: 0 0 100%; max-width: 100%;">
+        <!-- general form elements -->
+        <div class="card card-primary">
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form method="post" enctype="multipart/form-data">{% csrf_token %}
+              <div class="card-body">
+
+              <div class="form-group">
+                  <label>Category Name</label>
+                  <input type="text" value="{{ catObj.mCategoryName }}" name="catName" class="form-control" placeholder="Category Name" disabled>
+              </div>
+
+            {% for message in messages %}
+                {% if message.extra_tags == 'error' %}
+                    <p style="color: red; margin-top: 10px;">{{message}}</p>
+                {% else %}
+                    <p style="color: green; margin-top: 10px;">{{message}}</p>
+                {% endif %}
+            {% endfor %}
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer" style="margin-top: 10px;">
+              <button type="submit" name="delete" value="delete" class="btn btn-primary" style="background-color: #ff3333; border-color: #ff3333;">Delete Category</button>
+            </div>
+          </form>
+        </div>
+        <!-- /.card -->
+      </div>
+    </div>
+    <!-- /.row -->
+  </div><!-- /.container-fluid -->
+</section>
+{% endblock %}
+
+{% block content_script %}
+<script>
+$(function () {
+  bsCustomFileInput.init();
+});
+</script>
+{% endblock %}

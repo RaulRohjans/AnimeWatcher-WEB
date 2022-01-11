@@ -1,0 +1,468 @@
+{% extends 'content/base.html' %}
+{% load static %}
+
+{% block content_entire %}
+
+<!-- Header -->
+<div class="container-fluid style-info-page-sub-header">
+    <div class="" style="margin: 16px;">
+        <div class="row">
+            <div class="col-md-auto">
+                <img src="{{objAnime.mThumbnail}}" style="border-radius: 10px;" width="250" height="351">
+            </div>
+
+            <div class="col">
+                <div class="row">
+                    <h1 class="style-main-anime-title" style="font-size: 30px;">{{ objAnime.mNameEN|title }}: Episode {{ objEpisode.mEpisodeNumber }}</h1>
+                </div>
+
+                <div class="row">
+                    <h2 class="style-sub-anime-title" style="margin-left: 0px !important; font-size: 22px;">{{ objEpisode.mNameEN|title }}</h2>
+                </div>
+
+                <div class="row" style="margin-top: 1% !important;">
+                    <p class="style-main-anime-content-text" style="margin-left: 0px !important; font-size: 18px !important;"><b class="style-sub-sub-anime-title" style="margin-left: 0px !important;">Launch Date: </b>{{ objEpisode.mReleaseDate|date }}</p>
+                </div>
+
+                <div class="row">
+                    <p class="style-main-anime-content-text" style="margin-left: 0px !important; font-size: 18px !important;"><b class="style-sub-sub-anime-title" style="margin-left: 0px !important;">On Going: </b>{{ objAnime.mOnGoing }}</p>
+                </div>
+
+                {% for EpObj in EpObjs %}
+                    {% if EpObj.mEpisodeNumber == 1 and EpObj.mAnime.mNameEN == objAnime.mNameEN %}
+                        <div class="row">
+                            <p class="style-main-anime-content-text" style="font-size: 18px !important;"><b class="style-sub-sub-anime-title" style="margin-left: 0px !important;">Launch Date: </b> {{ EpObj.mReleaseDate|date }}</p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+                <div class="row">
+                    <p class="style-sub-sub-anime-title" style="margin-left: 0px !important;">Categories:</p>
+                </div>
+
+                <div class="row">
+                    <p class="style-main-anime-content-text" style="margin-left: 0px !important;">
+                        {% for obj in objAnime.mCategories.all %}
+                            {% if forloop.counter > 1 %}
+                            •
+                            {%endif%}
+                            <a href="/category/{{ obj.mCategoryName }}" class="style-a2">{{ obj.mCategoryName|title }}</a>
+                        {% endfor %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Part -->
+<div class="container-fluid" style="margin-top: 4%; margin-bottom: 8%; max-width: 80%">
+
+    <!-- Main Page Content -->
+    <div class="row">
+        <!-- Video Player Part-->
+        <div class="col">
+            <!-- Player Buttons -->
+            <div class="row">
+                <div class="float-left d-flex" style="padding-left: 0;">
+                    {% if objEpisode.mEpisodeNumber > 1 %}
+                        <a class="style-episode-controllers" href="/anime/{{ objAnime.mNameEN }}/{{ prevEp.mID }}"><</a>
+                    {% endif %}
+                </div>
+
+                <div class="mx-auto d-flex justify-content-center">
+                    <a class="style-episode-controllers" href="/anime/{{ objAnime.mNameEN }}" >All Episodes</a>
+                </div>
+
+                <div class="float-right d-flex" style="padding-right: 0;">
+                    {% if objEpisode.mEpisodeNumber != objEpisode.mAnime.mEpisodeCount %}
+                        <a class="style-episode-controllers" href="/anime/{{ objAnime.mNameEN }}/{{ nextEp.mID }}">></a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Video Player -->
+            <div class="row" style="margin-top: 1%">
+                {% if objEpisode.mVCDN != True %}
+                    <div class="video-js-responsive-container vjs-hd">
+                        <video id="videoPlayer" class="video-js vjs-theme-forest" controls preload="auto" poster="{{ objEpisode.mThumbnail }}" data-setup="{}">
+                            <source src="{{ objEpisode.mVideoFileLink }}" type="video/mp4" />
+
+                            <p class="vjs-no-js">
+                              To view this video please enable JavaScript, and consider upgrading to a
+                              web browser that
+                              <a href="https://videojs.com/html5-video-support/" target="_blank"
+                                >supports HTML5 video</a>
+                            </p>
+                        </video>
+                        <script src="https://vjs.zencdn.net/7.11.4/video.min.js"></script>
+                        <script src="https://cdn.sc.gl/videojs-hotkeys/0.2/videojs.hotkeys.min.js"></script>
+                        <script src="{% static 'content/js/video-player.js' %}" type="text/javascript"></script>
+                    </div>
+                {% else %}
+                    <div id="iframe-outer-div" class="ml-auto">
+                        <div id="iframe-inner-div">
+                            <iframe id="id-iframe" src="{{ objEpisode.mVideoFileLink }}" scrolling="no" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" frameborder="0" style="width: 1024px; height: 576px;"></iframe>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Episode Chooser Part -->
+        <div class="col-md-auto" style="margin-left: 2%;" id="episode-chooser-id">
+
+            <div class="row">
+                <div class="col-md-auto float-right d-flex" style="padding-left: 0;">
+                    <h1 style="margin-top: 0px; font-family: Montserrat; font-size: 26px;">Next Episodes:</h1>
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 2.5%">
+                <div id="episode-menu" class="vertical-menu" style="border-radius: 10px; max-width: 430px">
+                  {% for ep in objsEpisode %}
+                    {% if ep.mAnime == objAnime %}
+                      <a href="/anime/{{ ep.mAnime.mNameEN }}/{{ ep.mID }}" {% if ep == objEpisode %}class="active"{% endif %}>Episode {{ ep.mEpisodeNumber }} - {{ ep.mNameEN|title }}</a>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comments Warning -->
+    <div class="row" id="warning-wrapper" style="margin-top: 2%;">
+        <div class="alert warning" style="margin: auto !important;">
+          <span id="closebtn">&times;</span>
+          <strong>Warning!</strong> There is a very high chance the comment section contains spoilers. Proceed at your own risk!
+        </div>
+    </div>
+
+</div>
+
+<!-- Comment Section -->
+<div class="container">
+    <div class="post-comments">
+
+        <form method="post">{% csrf_token %}
+          <div class="form-group">
+            <label for="comment" style="font-size: 20px;">Your Comment:</label>
+            <textarea name="commentText" class="form-control" rows="3" style="resize: none;" required></textarea>
+          </div>
+          <button type="submit" name="post" value="new" class="btn comment-send-btn">Send</button>
+        </form>
+
+        <div class="comments-nav">
+          <ul class="nav nav-pills">
+            <li role="presentation" class="dropdown">
+              {% if commentObjs.count > 1 %}
+                <p>There are {{ commentObjs.count }} comments</p>
+              {% elif commentObjs.count == 1 %}
+                <p>There is only 1 comment</p>
+              {% else %}
+                <p>There are no comments yet</p>
+              {% endif %}
+            </li>
+          </ul>
+        </div>
+
+        <div>
+        {% for obj in commentObjs %}
+            {% if obj.mRepliedTo is None %}
+          <div class="media" style="flex-direction: column;">
+            <!-- first comment -->
+            <div class="media-heading">
+                <button class="btn comment-expand-button" type="button" data-toggle="collapse" data-target="#collapse{{ obj.mID }}" aria-expanded="false" aria-controls="collapseExample"><span style="font-size: 60% !important; top: 0 !important;" class="glyphicon glyphicon-minus" aria-hidden="true"></span></button> <span style="color: #000;">{{ obj.mUser.username }}  {% if obj.mUser.is_staff %}</span><span class="label label-info" style="color: #fff; background-color: #5bc0de; padding: 3px; border-radius: 4px; font-size: 12px;">Admin</span>{% endif %} <span class="label label-info" style="background-color: #ff5c33; color: #fff; padding: 3px; border-radius: 4px; font-size: 12px;">{{ obj.mPostDate }}</span>
+            </div>
+
+            <div class="panel-collapse collapse in show" id="collapse{{ obj.mID }}">
+              <div class="media-body">
+                <p style="font-size: 16px !important;">{{ obj.mBody }}</p>
+                <div class="comment-meta">
+                  {% if request.user.is_staff or request.user == obj.mUser %}
+                    <span><a href="/delete-comment/{{ obj.mID }}">delete</a></span>
+                  {% endif %}
+                  {% if request.user != obj.mUser %}
+                    <span><a href="/report-comment/{{ obj.mID }}">report</a></span>
+                  {% endif %}
+                  <span>
+                    <a class="" role="button" data-toggle="collapse" href="#replyComment{{ obj.mID }}" aria-expanded="false" aria-controls="collapseExample">reply</a>
+                  </span>
+                  <div class="collapse" id="replyComment{{ obj.mID }}">
+                    <form method="post">{% csrf_token %}
+                      <div class="form-group">
+                        <label for="comment">Your Comment</label>
+                        <textarea name="commentText" id="comment" class="form-control" rows="3" style="resize: none; width: 170%;" required></textarea>
+                      </div>
+                      <button type="submit" name="post" value="{{ obj.mID }},{{ obj.mUser.username }}" class="btn comment-send-btn">Send</button>
+                    </form>
+                  </div>
+                </div>
+                <!-- comment-meta -->
+                {% for replyObj in commentObjs %}
+                  {% if replyObj.mRepliedTo is not None %}
+                    {% if replyObj.mRepliedTo == obj %}
+                        <div class="media" style="flex-direction: column;">
+                          <!-- answer to the first comment -->
+                          <div class="media-heading">
+                              <button class="btn comment-expand-button" type="button" data-toggle="collapse" data-target="#collapse{{ replyObj.mID }}" aria-expanded="false" aria-controls="collapseExample"><span class="glyphicon {% if replyObj.mUser == request.user %}glyphicon-minus{% else %}glyphicon-plus{% endif %}" style="font-size: 60% !important; top: 0 !important;" aria-hidden="true"></span></button> <span style="color: #000;">{{ replyObj.mUser.username }}  {% if replyObj.mUser.is_staff %}</span><span class="label label-info" style="color: #fff; background-color: #5bc0de; padding: 3px; border-radius: 4px; font-size: 12px;">Admin</span>{% endif %} <span class="label label-info" style="background-color: #ff5c33; color: #fff; padding: 3px; border-radius: 4px; font-size: 12px;">{{ replyObj.mPostDate }}</span>
+                          </div>
+
+                          <div class="panel-collapse collapse in {% if replyObj.mUser == request.user %}show{% endif %}" id="collapse{{ replyObj.mID }}">
+
+                            <div class="media-body">
+                              <p style="font-size: 16px !important;"><strong style="color: #ff5c33;">{{ replyObj.mRepliedUser }}</strong> {{ replyObj.mBody }}</p>
+                              <div class="comment-meta">
+                                {% if request.user.is_staff or request.user == replyObj.mUser  %}
+                                    <span><a href="/delete-comment/{{ replyObj.mID }}">delete</a></span>
+                                {% endif %}
+                                  {% if request.user != replyObj.mUser %}
+                                    <span><a href="/report-comment/{{ replyObj.mID }}">report</a></span>
+                                  {% endif %}
+
+                                <span>
+                                  <a class="" role="button" data-toggle="collapse" href="#replyComment{{ replyObj.mID }}" aria-expanded="false" aria-controls="collapseExample">reply</a>
+                                </span>
+                                <div class="collapse" id="replyComment{{ replyObj.mID }}">
+                                  <form method="post">{% csrf_token %}
+                                    <div class="form-group">
+                                      <label for="comment">Your Comment</label>
+                                      <textarea name="commentText" class="form-control" rows="3" style="resize: none; width: 170%;" required></textarea>
+                                    </div>
+                                    <button type="submit" name="post" value="{{ obj.mID }},{{ replyObj.mUser.username }}" class="btn comment-send-btn">Send</button>
+                                  </form>
+                                </div>
+                              </div>
+                              <!-- comment-meta -->
+                            </div>
+                          </div>
+                          <!-- comments -->
+
+                        </div>
+                        <!-- answer to the first comment -->
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+            <!-- comments -->
+
+          </div>
+            {% endif %}
+        {% endfor %}
+        </div>
+
+  </div>
+</div>
+
+{% endblock %}
+
+{% block content_style %}
+<!-- player-->
+<link href="{% static 'content/CSS/video-js.css' %}" rel="stylesheet" />
+<link href="{% static 'content/CSS/index.css' %}" rel="stylesheet">
+
+<!-- Iframe Style -->
+<style>
+    #iframe-outer-div {
+        max-width: 1024px;
+        max-height: 576px;
+        width: 100%;
+        height: 100%;
+    }
+
+    #iframe-inner-div {
+        height: 0px;
+        padding-bottom: 56.25%;
+        position: relative;
+    }
+
+    #iframe-inner-div iframe {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
+</style>
+
+<!-- Video js Player -->
+<style>
+    .video-js .vjs-time-control {
+        display: block;
+    }
+    .video-js .vjs-remaining-time {
+        display: none;
+    }
+
+    .video-js-responsive-container.vjs-hd {
+        padding-top: 56.25%;
+    }
+    .video-js-responsive-container.vjs-sd {
+        padding-top: 75%;
+    }
+    .video-js-responsive-container {
+        width: 100%;
+        position: relative;
+    }
+    .video-js-responsive-container .video-js {
+        height: 100% !important;
+        width: 100% !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+</style>
+
+<!-- Episodes Menu -->
+<style>
+.vertical-menu {
+  min-width: 375px !important;
+  overflow-y: auto !important;
+}
+
+.vertical-menu a {
+  background-color: #eee !important;
+  color: black !important;
+  display: block !important;
+  padding: 12px !important;
+  text-decoration: none !important;
+}
+
+.vertical-menu a:hover {
+  background-color: #ccc !important;
+}
+
+.vertical-menu a.active {
+  background-color: #ff5c33 !important;
+  color: white !important;
+}
+
+@media screen and (max-width: 1000px)
+{
+    #episode-chooser-id {
+        display: none !important;
+    }
+}
+</style>
+
+<!-- Comment Section -->
+<style>
+.comment-send-btn {
+  padding: 8px 16px !important;
+  margin-left: 0px !important;
+  background-color: #ff5c33 !important;
+  color: #fff !important;
+}
+
+.post-comments {
+  padding-bottom: 9px !important;
+  margin: 5px 0 5px !important;
+}
+
+.comments-nav {
+  border-bottom: 1px solid #eee !important;
+  margin-bottom: 5px !important;
+}
+
+.post-comments .comment-meta {
+  border-bottom: 1px solid #eee !important;
+  margin-bottom: 5px !important;
+}
+
+.post-comments .media {
+  border-left: 1px solid #787878 !important;
+  margin-bottom: 5px !important;
+  padding-left: 10px !important;
+}
+
+.post-comments .media-heading {
+  font-size: 14px !important;
+  color: grey !important;
+}
+
+.post-comments .comment-meta a {
+  font-size: 12px !important;
+  color: grey !important;
+  font-weight: bolder !important;
+  margin-right: 5px !important;
+}
+
+.comment-expand-button {
+  border: 1px solid #808080 !important;
+  padding: 8px 12px !important;
+}
+</style>
+
+<!-- Alert Message -->
+<style>
+.alert {
+  font-size: 16px;
+  padding: 20px;
+  margin-top: 24px;
+  width: 1024px;
+  background-color: #f44336;
+  color: white;
+  opacity: 1;
+  transition: opacity 0.6s;
+  margin-bottom: 15px;
+}
+
+.alert.warning {background-color: #ff9800;}
+
+#closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#closebtn:hover {
+  color: black;
+}
+</style>
+
+{% endblock %}
+
+
+{% block content_scripts %}
+<!-- Comment Section -->
+<script>
+$('[data-toggle="collapse"]').on('click', function() {
+    var $this = $(this),
+            $parent = typeof $this.data('parent')!== 'undefined' ? $($this.data('parent')) : undefined;
+    if($parent === undefined) { /* Just toggle my  */
+        $this.find('.glyphicon').toggleClass('glyphicon-plus glyphicon-minus');
+        return true;
+    }
+
+    /* Open element will be close if parent !== undefined */
+    var currentIcon = $this.find('.glyphicon');
+    currentIcon.toggleClass('glyphicon-plus glyphicon-minus');
+    $parent.find('.glyphicon').not(currentIcon).removeClass('glyphicon-minus').addClass('glyphicon-plus');
+
+});
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+<!-- Alert Message -->
+<script>
+$("#closebtn").click(function(){
+    $("#warning-wrapper").hide();
+});
+</script>
+
+<script>
+    $(window).resize(function() {
+       $('#episode-menu').height($('#videoPlayer').height());
+    });
+
+    $(document).ready(function() {
+        $('#episode-menu').height($('#videoPlayer').height());
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends 'admin/base.html' %}
+
+{% block subtitle %}active{% endblock %}
+
+{% block edit_subtitle %}active{% endblock %}
+
+{% block open_subtitle %}menu-open{% endblock %}
+
+{% block content_main %}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Edit Subtitle {{ subtObj.mID }}</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{%  url 'admin' %}">Dashboard</a></li>
+          <li class="breadcrumb-item"><a href="{%  url 'admin-subtitle-all' %}">Subtitles</a></li>
+          <li class="breadcrumb-item">Edit</li>
+          <li class="breadcrumb-item active">{{ subtObj.mID }}</li>
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- left column -->
+      <div class="col-md-6" style="flex: 0 0 100%; max-width: 100%;">
+        <!-- general form elements -->
+        <div class="card card-primary">
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form method="post" enctype="multipart/form-data">{% csrf_token %}
+              <div class="card-body">
+
+              <div class="row">
+                <div class="col-sm-6">
+                   <div class="form-group">
+                     <label>Language<b style="color: red;">*</b></label>
+                     <input type="text" class="form-control" value="{{ subtObj.mLanguage }}" placeholder="Language" name="lang" required>
+                   </div>
+                 </div>
+
+                 <div class="col-sm-6">
+                   <div class="form-group">
+                     <label>Language Code<b style="color: red;">*</b></label>
+                     <input type="text" class="form-control" value="{{ subtObj.mShortLanguage }}" placeholder="Language Code (en-US)" name="langCode" required>
+                   </div>
+                 </div>
+            </div>
+
+              <div class="form-group">
+                 <label>Subtitle File<b style="color: red;">*</b></label>
+                 <input type="text" class="form-control" placeholder="https://host.com/english.vtt" value="{{ subtObj.mLink }}" name="subtitle" required>
+               </div>
+
+              <div class="form-group" style="margin-top: 16px;">
+                  <div class="selecCats">
+                    <label>Episode<b style="color: red;">*</b></label>
+                    <select class="custom-select" name="epi" required>
+                        {% for episodeObj in episodeObjs %}
+                            <option value="{{ episodeObj.mID }}">{{ episodeObj.mID }} - {{ episodeObj.mAnime.mNameEN|title }} Episode {{ episodeObj.mEpisodeNumber }}: {{ episodeObj.mNameEN|title }}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+                </div>
+
+            {% for message in messages %}
+                {% if message.extra_tags == 'error' %}
+                    <p style="color: red; margin-top: 10px;">{{message}}</p>
+                {% else %}
+                    <p style="color: green; margin-top: 10px;">{{message}}</p>
+                {% endif %}
+            {% endfor %}
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer" style="margin-top: 25px;">
+              <button type="submit" name="save" value="save" class="btn btn-primary" style="margin-right: 84.5%">Save Subtitle</button>
+              <button type="submit" name="delete" value="delete" class="btn btn-primary" style="background-color: #ff3333; border-color: #ff3333;">Delete Subtitle</button>
+            </div>
+          </form>
+        </div>
+        <!-- /.card -->
+      </div>
+    </div>
+    <!-- /.row -->
+  </div><!-- /.container-fluid -->
+</section>
+{% endblock %}
+
+{% block content_script %}
+<script>
+$(function () {
+  bsCustomFileInput.init();
+});
+</script>
+
+<script>
+$("div.selecCats select").val("{{ subtObj.mEpisode.mID }}").change();
+</script>
+
+<script>
+document.getElementById("id_Subtitle").required = false
+</script>
+{% endblock %}

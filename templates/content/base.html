@@ -1,0 +1,397 @@
+{% load static %}
+
+<!DOCTYPE html>
+<!-- Open HTML -->
+<html lang="en-US">
+<!-- Open Head -->
+<head>
+    <!-- Meta Tags -->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!--------------->
+
+        <!-- Title and Favicons -->
+        <title>Anime Watcher - {{pageTitle}}</title>
+        <link rel="icon" href="{% static 'favicon.png' %}" media="(prefers-color-scheme:no-preference)">
+        <link rel="icon" href="{% static 'favicon_white.png' %}" media="(prefers-color-scheme:dark)">
+        <link rel="icon" href="{% static 'favicon_black.png' %}" media="(prefers-color-scheme:light)">
+        <!------------------------>
+
+        <!-- Web Descriptions -->
+        <link rel="alternate" type="application/rss+xml" title="Anime Watcher - Watch Anime Anywhere, Anytime" href="https://google.com/" />
+        <!---------------------->
+
+        <!-- Style Sheets -->
+        <link rel="stylesheet" href="{% static 'content/CSS/style.css' %}">
+        <!------------------>
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT&display=swap" rel="stylesheet">
+        <!----------->
+
+        <!-- BootStrap -->
+            <link rel="stylesheet" href="{% static 'content/CSS/glyphicons.css' %}">
+            <!-- Latest compiled and minified CSS -->
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+            <!-- Optional theme -->
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
+
+            <!-- Latest compiled and minified JavaScript -->
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+
+            <!-- Material Design Bootstrap -->
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.0/css/mdb.min.css" rel="stylesheet">
+        <!--------------->
+
+    {% block content_style%}
+    {% endblock %}
+</head>
+<!-- Close Head -->
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light" id="style-nav-header">
+        <img src="{% static 'content/Images/Logos/edited.png' %}" style="cursor: pointer;" class="navbar-brand" id="nav-page-logo" alt="Anime Watcher"/>
+        <button class="navbar-toggler ml-auto" id="mobile-search-icon" type="button" aria-label="Search">
+            <span class="fas fa-search" id="navigation-mobile-search-icon" style="color: #fff"></span>
+        </button>
+
+        <a class="navbar-toggler" id="mobile-navbar-button-id">
+            <span class="fas fa-bars" id="navigation-mobile-menu-icon" style="color: #fff;"></span>
+        </a>
+
+      <div class="collapse navbar-collapse mr-auto" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+
+          <li class="nav-item">
+            <a class="style-a" href="{%  url 'anime-list' %}">Anime List</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="style-a" href="{%  url 'categories' %}">Categories</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="style-a" href="{%  url 'my-list' %}">My List</a>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="style-a dropdown-toggle" id="nav-pages-dropdown-menu-id">
+              Pages
+            </a>
+            <div id="nav-pages-dropdown-id" style="display: block; opacity: 0; visibility: hidden;" class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item style-a2" href="{%  url 'submit-anime' %}">Submit Anime</a>
+              <a class="dropdown-item style-a2" href="{%  url 'donate' %}">Donate</a>
+              <a class="dropdown-item style-a2" href="{%  url 'about-us' %}">About Us</a>
+            </div>
+          </li>
+
+        </ul>
+
+        <form id="style-nav-search-form" onsubmit="event.preventDefault();" role="search" method="get" action="{%  url 'anime-list' %}">
+            <input id="style-nav-search-input" class="style-input-and-button" type="search" name="s" placeholder="Search..." autofocus required />
+            <button id="style-nav-search-button" class="style-input-and-button style-only-button" type="submit">Go</button>
+        </form>
+
+        {% if request.user.is_authenticated %}
+            <div class="style-dropdown" id="outer-nav-user-wrapper">
+                <a id="style-nav-user-wrapper" class="style-a" style="font-size: 16px;">
+                    <b id="style-nav-username">{{ request.user.username }}</b><i class="fas fa-user" style="margin-left: 6px;"></i>
+                </a>
+            </div>
+
+
+        {% else %}
+            <div class="style-dropdown" id="outer-nav-user-wrapper">
+                <a href="{%  url 'login' %}" class="style-a">
+                    <img src="{% static 'content/Images/Icons/user.svg' %}" id="style-nav-user-logo" alt='user' style="margin-top: 50%">
+                </a>
+            </div>
+        {% endif %}
+
+      </div>
+    </nav>
+
+    <div class="user-dropdown-box">
+        <div class="style-dropdown-content style-user-dropdown-content ml-auto" id="style-nav-hidden-dropdown">
+            {% if request.user.is_superuser %}
+                <a class="style-a2" href="{%  url 'admin' %}">AW Admin</a>
+            {% endif %}
+            <a class="style-a2" href="{%  url 'account-settings' %}">Account Settings</a>
+            <a class="style-a2" href="{%  url 'change-password' %}">Change Password</a>
+            <a class="style-a2" href="{%  url 'logout' %}">Logout</a>
+        </div>
+    </div>
+
+    <div class="search-box" style="z-index: 999;">
+        <form id="style-nav-search-form" style="background: transparent !important; border: 1px solid #3e3e3e !important; border-radius: 0.5rem !important;" class="ml-auto" onsubmit="event.preventDefault();" role="search" method="get" action="{%  url 'anime-list' %}">
+            <input id="style-nav-search-input" class="style-input-and-button" type="search" name="s" placeholder="Search..." autofocus required />
+            <button id="style-nav-search-button" class="style-input-and-button style-only-button" type="submit">Go</button>
+        </form>
+    </div>
+
+    <div id="myLinks">
+
+        {% if request.user.is_authenticated %}
+            <div class="row">
+                {% if request.user.is_superuser %}
+                    <a class="style-a" href="{%  url 'admin' %}">AW Admin</a>
+                {% endif %}
+
+                <a class="style-a" href="{%  url 'account-settings' %}">Account Settings</a>
+
+                <a class="style-a" href="{%  url 'change-password' %}">Change Password</a>
+
+                <a class="style-a" href="{%  url 'logout' %}">Logout</a>
+
+            </div>
+            <hr style="margin: 0; padding: 0;"/>
+        {% else %}
+            <div class="row">
+                <a href="{%  url 'login' %}" style="font-weight: bold;" class="style-a">Login/Register</a>
+            </div>
+        {% endif %}
+
+        {% if request.user.is_superuser %}
+            <div class="row">
+                <a class="style-a" href="{% url 'admin' %}">AW Admin</a>
+            </div>
+        {% endif %}
+
+        <div class="row">
+            <a class="style-a" href="{% url 'anime-list' %}">Anime List</a>
+        </div>
+
+        <div class="row">
+            <a class="style-a" href="{% url 'categories' %}">Categories</a>
+        </div>
+
+        <div class="row">
+            <a class="style-a" href="{% url 'my-list' %}">My List</a>
+        </div>
+
+        <div class="row">
+            <a class="style-a" href="{% url 'submit-anime' %}">Submit Anime</a>
+        </div>
+
+        <div class="row">
+            <a class="style-a" href="{% url 'donate' %}">Donate</a>
+        </div>
+    </div>
+    <!-------------------->
+
+
+
+    <!-- Main Page Content -->
+    <div id="style-main-page-container">
+        {% block content_entire %}
+
+        {% endblock %}
+    </div>
+    <!----------------------->
+
+
+
+    <!-- Footer -->
+    <footer class="page-footer" id="style-footer">
+
+      <div id="style-main-footer-container container">
+        <div class="row">
+
+          <div class="col mr-auto" id="style-footer-logo-container">
+            <a><img src="{% static 'content/Images/Logos/edited.png' %}" id="footer-page-logo" alt="Anime Watcher"/></a>
+            <p class="mt-2 style-footer-text" style="max-width: 75%">Watch your favourite Anime shows, add them to your list or even comment on the episodes you watch!</p>
+          </div>
+
+          <div class="col mx-auto">
+            <h6 class="style-footer-text">Quick Links</h6>
+            <hr class="bg-success mt-0 d-inline-block mx-auto" id="style-footer-quicklinks-underline">
+              <ul class="list-unstyled">
+                <li class="my-2"><a href="{%  url 'donate' %}" class="style-a">Donate</a></li>
+                <li class="my-2"><a href="{%  url 'about-us' %}" class="style-a">About Us</a></li>
+                <li class="my-2"><a href="{%  url 'privacy-policy' %}" class="style-a">Privacy Policy</a></li>
+                <li class="my-2"> <a href="{%  url 'disclaimer' %}" class="style-a">Disclaimer</a></li>
+              </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="footer-copyright text-center py-3" id="style-footer-copyright-container">
+        <hr class="mb-4 mt-0 d-inline-block mx-auto" id="style-footer-copyright-divisory">
+        <p>&copy; Copyrights and trademarks for the anime, and other promotional materials are held by their respective owners and their use is allowed under the fair use clause of the Copyright Law.</p>
+      </div>
+    </footer>
+    <!------------>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.0/js/mdb.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        $(window).scroll(function() {
+          if ($(document).scrollTop() > 50) {
+            $('#nav-page-logo').width('153.6px');
+          } else {
+            $('#nav-page-logo').width('182.4px');
+          }
+        });
+    </script>
+
+    <script>
+        $('#nav-pages-dropdown-menu-id').click(function(){
+            if($('#nav-pages-dropdown-id').css('opacity') == 0)
+            {
+                $('#nav-pages-dropdown-id').css('opacity', '1');
+                $('#nav-pages-dropdown-id').css('visibility', 'visible');
+            }
+            else
+            {
+                $('#nav-pages-dropdown-id').css('opacity', '0');
+                $('#nav-pages-dropdown-id').css('visibility', 'hidden');
+            }
+        });
+    </script>
+
+    <script>
+        $("#style-nav-user-wrapper").click(function(){
+
+            if($('.user-dropdown-box').css('opacity') == 0)
+            {
+                $('.user-dropdown-box').css('opacity', '1');
+                $('.user-dropdown-box').css('visibility', 'visible');
+            }
+            else
+            {
+                $('.user-dropdown-box').css('opacity', '0');
+                $('.user-dropdown-box').css('visibility', 'hidden');
+            }
+
+        });
+    </script>
+
+    <script>
+        $(document).mouseup(function(e){
+            var container = $("#style-nav-hidden-dropdown");
+
+            // If the target of the click isn't the container
+            if(!container.is(e.target) && container.has(e.target).length === 0){
+                $('.user-dropdown-box').css('opacity', '0');
+                $('.user-dropdown-box').css('visibility', 'hidden');
+            }
+        });
+    </script>
+
+    <script>
+        $(document).mouseup(function(e){
+            var container = $("#nav-pages-dropdown-id");
+
+            // If the target of the click isn't the container
+            if(!container.is(e.target) && container.has(e.target).length === 0){
+                $('#nav-pages-dropdown-id').css('opacity', '0');
+                $('#nav-pages-dropdown-id').css('visibility', 'hidden');
+            }
+        });
+    </script>
+
+    <script>
+        $("#navigation-mobile-search-icon").click(function() {
+
+            if($('.search-box').css('opacity') == 0)
+            {
+                $('.search-box').css('opacity', '1');
+                $('.search-box').css('visibility', 'visible');
+            }
+            else
+            {
+                $('.search-box').css('opacity', '0');
+                $('.search-box').css('visibility', 'hidden');
+            }
+
+           $("input[type='search']").focus();
+        });
+    </script>
+
+    <script>
+        $('#mobile-navbar-button-id').click(function() {
+          if($('#myLinks').css('opacity') == 0)
+          {
+              $('#myLinks').css('opacity', '1');
+              $('#myLinks').css('visibility', 'visible');
+              $('#myLinks').css('position', 'relative');
+          }
+          else
+          {
+              $('#myLinks').css('opacity', '0');
+              $('#myLinks').css('visibility', 'hidden');
+              $('#myLinks').css('position', 'absolute');
+          }
+
+        });
+    </script>
+
+    <script>
+        $("#style-nav-user-wrapper").hover(function(){
+            $('#style-nav-username').css('color', '#ff5c33');
+            $('#style-nav-user-logo').attr('src', '{% static 'content/Images/Icons/userOrange.svg' %}');
+        }, function(){
+            $('#style-nav-username').css('color', '#ffffff');
+            $('#style-nav-user-logo').attr('src', '{% static 'content/Images/Icons/user.svg' %}');
+        });
+    </script>
+
+    <script>
+        $("#nav-page-logo").click(function() {
+            location.href = location.origin;
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            if (!window.matchMedia)
+                return;
+
+            var current = $('head > link[rel="icon"][media]');
+            $.each(current, function(i, icon) {
+                var match = window.matchMedia(icon.media);
+                function swap() {
+                    if (match.matches) {
+                        current.remove();
+                        current = $(icon).appendTo('head');
+                    }
+                }
+                match.addListener(swap);
+                swap();
+            });
+        });
+    </script>
+
+    <script>
+        $(window).on('resize', function(){
+            var win = $(this);
+
+            if (win.width() < 1200) {
+                $("#episode-chooser-id").hide()
+            }
+            else {
+                $("#episode-chooser-id").show()
+            }
+        });
+    </script>
+
+    {% block content_scripts %}
+    {% endblock %}
+    <!------------->
+</body>
+</html>

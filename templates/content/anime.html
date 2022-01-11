@@ -1,0 +1,132 @@
+{% extends 'content/base.html' %}
+{% load static %}
+
+{% block content_entire %}
+
+<div class="container-fluid style-info-page-sub-header">
+    <div class="" style="margin: 16px;">
+        <div class="row">
+            <div class="col-md-auto">
+                <img src="{{objAnime.mThumbnail}}" style="border-radius: 10px;" width="300" height="421">
+            </div>
+
+            <div class="col">
+                <div class="row">
+                    <h1 class="style-main-anime-title">{{ objAnime.mNameEN|title }}</h1>
+                </div>
+
+
+                <div class="row">
+                    <h2 class="style-sub-anime-title">{% if objAnime.mNameJP %}{{ objAnime.mNameJP|title }}{% endif %}</h2>
+                </div>
+
+
+                <div class="row">
+                    <p class="style-sub-sub-anime-title" >Description:</p>
+                </div>
+                <div class="row">
+                    <p class="style-main-anime-content-text" style="margin-left: 20px !important;">{{ objAnime.mDescription }}</p>
+                </div>
+
+                <div class="row">
+                    <p class="style-main-anime-content-text" style="font-size: 18px !important;"><b class="style-sub-sub-anime-title" style="margin-left: 0px !important;">On Going: </b>{{ objAnime.mOnGoing }}</p>
+                </div>
+
+                {% for EpObj in EpObjs %}
+                    {% if EpObj.mEpisodeNumber == 1 and EpObj.mAnime.mNameEN == objAnime.mNameEN %}
+                        <div class="row">
+                            <p class="style-main-anime-content-text" style="font-size: 18px !important;"><b class="style-sub-sub-anime-title" style="margin-left: 0px !important;">Launch Date: </b> {{ EpObj.mReleaseDate|date }}</p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+                <div class="row">
+                    <p class="style-sub-sub-anime-title">Categories:</p>
+                </div>
+
+                <div class="row">
+                    <p class="style-main-anime-content-text">
+                        {% for obj in objAnime.mCategories.all %}
+                            {% if forloop.counter > 1 %}
+                            •
+                            {%endif%}
+                            <a href="/category/{{ obj.mCategoryName }}" class="style-a2">{{ obj.mCategoryName|title }}</a>
+                        {% endfor %}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-auto">
+                <form method="post">{% csrf_token %}
+                    {% if isInList %}
+                        <input type="submit" class="btn style-mylist-button" value="- Remove from my list">
+                    {% else %}
+                        <input type="submit" class="btn style-mylist-button" value="+ Add to my list">
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-auto">
+                {% for message in messages %}
+                    {% if message.extra_tags == 'error' %}
+                        <p style="color: red;">{{message}}</p>
+                    {% else %}
+                        <p style="color: green;">{{message}}</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid" style="margin-top: 3%; margin-bottom: 5%;">
+    <h5 style="margin-left: 2%;">Episodes</h5>
+    <hr class="style-menus-hr" style="margin-bottom: 2%;">
+
+    {% for EpObj in EpObjs %}
+        {% if EpObj.mAnime.mNameEN == objAnime.mNameEN %}
+            <div class="row" style="margin-bottom: 1%;">
+                <article class="style-episode-item">
+                    <a href="{{ request.path }}{{ EpObj.mID }}">
+                        <!-- Left side -->
+                        <div class="row">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col-md-auto">
+                                        <p style="margin-bottom: 0.5%; font-family: sans-serif; color: black; font-size: 20px;">{{ objAnime.mNameEN|title }} Episode {{ EpObj.mEpisodeNumber }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-auto">
+                                        <p style="font-size: 15px;">{{ EpObj.mNameEN|title }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-auto float-right">
+                                <span style="background-color: #ff5c33; padding: .2em .6em .3em; font-size: 85%; font-weight: 700; line-height: 1; color: #fff; text-align: center; border-radius: .25em;">Launch Date: {{ EpObj.mReleaseDate|date }}</span>
+                            </div>
+                        </div>
+                        <!--------------->
+
+                        <!-- Right Side -->
+                        <!--<div class="row" style="margin-bottom: 0px;">
+                            <div class="col-md-auto">
+                                <p style="font-size: 15px;">{{ EpObj.mNameEN|title }}</p>
+                            </div>
+                        </div>-->
+                        <!----------------->
+                    </a>
+                </article>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,280 @@
+{% extends 'content/base.html' %}
+{% load sectodur %}
+
+{% block content_entire %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Left -->
+        <div class="coo-md-auto" style="margin-right: 2%">
+            <div class="style-video-category-wrapper">
+                <h6 class="style-video-category-main-title">Video Category</h6>
+                <hr class="style-menus-hr" id="style-video-category-main-title-hr" style="margin-bottom: 1.25rem;">
+
+                <div class="col">
+                    {% for obj in objs %}
+                        <div class="row">
+                            <a class="style-a2 style-video-category-options" href="{{ request.path }}category/{{obj.mCategoryName}}">{{obj.mCategoryName|title}}</a>
+                            <span class="ml-auto style-video-category-options">{{obj.mAnimeCount}}</span>
+                            {% if forloop.last == False %}
+                                <hr style="width: 100%; margin-top: 0.80rem; margin-bottom: 0.90rem;"/>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Right -->
+        <div style="margin: 0 auto;">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div style="width: 100%">
+                        <a class="style-filter-item-options" style="color: #000 !important;" id="filter-option-id-latest">Latest</a>
+                        <a class="style-filter-item-options" id="filter-option-id-most-views">Most Views</a>
+                        <a class="style-filter-item-options" id="filter-option-id-random">Random</a>
+                        <!--<hr id="video-index-hr-id" class="style-menus-hr style-hr-jquery-automation" style="margin-bottom: 1.25rem; width: 100%; margin-left: 0; margin-right: 0; padding-right: 0;">-->
+                        <div id="video-index-hr-id" class="style-menus-bar" style="margin-bottom: 1.25rem; width: 100%; margin-left: 0; margin-right: 0; padding-right: 0;">
+                            <div class="style-menus-bar-before">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-auto" style="margin-top: 16px;">
+
+                    <!-- Latest Episodes -->
+                    <div id="episode-filter-latest-id" class="style-episode-filter-div-wrapper" style="opacity: 1; visibility: visible;">
+
+                        {% for LatestEpisodeObj in LatestEpisodeObjs%}
+                            {% if forloop.counter0 == 0 %}
+                                <div class="row" style="margin-bottom: 5%;">
+                            {% elif forloop.counter0|divisibleby:"4" == True %}
+                                </div>
+                                <div class="row" style="margin-bottom: 5%;">
+                            {% endif %}
+
+                            <article id="id-test-article-container" style="margin: 0 auto;">
+                                <div class="row">
+                                    <a href="/anime/{{LatestEpisodeObj.mAnime.mNameEN}}/{{LatestEpisodeObj.mID}}" style="max-width: 300px;">
+                                        <img src="{% if LatestEpisodeObj.mThumbnail != '' %}{{LatestEpisodeObj.mThumbnail}}{% else %}https://drive.google.com/uc?export=download&id=1-hEjG3eO0VtZNagUvvppAKk5O39MwrFb{% endif %}" width="230" height="129" style="border-radius: 5px;" alt="{{LatestEpisodeObj.mNameEN}}">
+                                        <i class="fas fa-play style-video-play-button-icon" style="color: #fff; width: 12.5px"></i>
+                                        <span class="style-video-duration">{{ LatestEpisodeObj.mLengthSecs|sectodur:"short"}}</span>
+                                    </a>
+                                </div>
+
+                                <div class="row">
+                                    <h6 style="margin-top: 6px;">
+                                        <a class="style-a2" style="font-size: 0.9rem" href="/anime/{{LatestEpisodeObj.mAnime.mNameEN}}/{{LatestEpisodeObj.mID}}">{{LatestEpisodeObj.mAnime.mNameEN|title|truncatechars:20}} Episode {{LatestEpisodeObj.mEpisodeNumber}}</a>
+                                    </h6>
+                                </div>
+
+                                <div class="row">
+                                    <div style="color: #707070;">{{LatestEpisodeObj.mReleaseDate|date}}</div>
+                                    <span style="margin: 0 4px; color: #707070;">•</span>
+                                    <span style="color: #707070;"> {{LatestEpisodeObj.mViews}} views</span>
+                                </div>
+                            </article>
+
+                        {% endfor %}
+                        </div>
+                    </div>
+                    <!--------------------->
+
+                    <!-- Most Viewed Episodes -->
+                    <div id="episode-filter-most-views-id" class="style-episode-filter-div-wrapper" style="display: none; opacity: 0;">
+
+                        {% for LatestEpisodeObj in MostViewsEpisodeObjs%}
+                            {% if forloop.counter0 == 0 %}
+                                <div class="row" style="margin-bottom: 5%;">
+                            {% elif forloop.counter0|divisibleby:"4" == True %}
+                                </div>
+                                <div class="row" style="margin-bottom: 5%;">
+                            {% endif %}
+
+                            <article id="id-test-article-container" style="margin: 0 auto;">
+                                <div class="row">
+                                    <a href="/anime/{{LatestEpisodeObj.mAnime.mNameEN}}/{{LatestEpisodeObj.mID}}" style="max-width: 300px;">
+                                        <img src="{% if LatestEpisodeObj.mThumbnail != '' %}{{LatestEpisodeObj.mThumbnail}}{% else %}https://drive.google.com/uc?export=download&id=1-hEjG3eO0VtZNagUvvppAKk5O39MwrFb{% endif %}" width="230" height="129" style="border-radius: 5px;" alt="{{LatestEpisodeObj.mNameEN}}">
+                                        <i class="fas fa-play style-video-play-button-icon" style="color: #fff; width: 12.5px"></i>
+                                        <span class="style-video-duration">{{ LatestEpisodeObj.mLengthSecs|sectodur:"short"}}</span>
+                                    </a>
+                                </div>
+
+                                <div class="row">
+                                    <h6 style="margin-top: 6px;">
+                                        <a class="style-a2" style="font-size: 0.9rem" href="/anime/{{LatestEpisodeObj.mAnime.mNameEN}}/{{LatestEpisodeObj.mID}}">{{LatestEpisodeObj.mAnime.mNameEN|title|truncatechars:20}} Episode {{LatestEpisodeObj.mEpisodeNumber}}</a>
+                                    </h6>
+                                </div>
+
+                                <div class="row">
+                                    <div style="color: #707070;">{{LatestEpisodeObj.mReleaseDate|date}}</div>
+                                    <span style="margin: 0 4px; color: #707070;">•</span>
+                                    <span style="color: #707070;"> {{LatestEpisodeObj.mViews}} views</span>
+                                </div>
+                            </article>
+
+                        {% endfor %}
+                        </div>
+                    </div>
+                    <!--------------------->
+
+                    <!-- Random Episodes -->
+                    <div id="episode-filter-random-id" class="style-episode-filter-div-wrapper" style="display: none">
+
+                        {% for LatestEpisodeObj in RandomEpisodeObjs%}
+                            {% if forloop.counter0 == 0 %}
+                                <div class="row" style="margin-bottom: 5%;">
+                            {% elif forloop.counter0|divisibleby:"4" == True %}
+                                </div>
+                                <div class="row" style="margin-bottom: 5%;">
+                            {% endif %}
+
+                            <article id="id-test-article-container" style="margin: 0 auto;">
+                                <div class="row">
+                                    <a href="/anime/{{LatestEpisodeObj.mAnime.mNameEN}}/{{LatestEpisodeObj.mID}}" style="max-width: 300px;">
+                                        <img src="{% if LatestEpisodeObj.mThumbnail != '' %}{{LatestEpisodeObj.mThumbnail}}{% else %}https://drive.google.com/uc?export=download&id=1-hEjG3eO0VtZNagUvvppAKk5O39MwrFb{% endif %}" width="230" height="129" style="border-radius: 5px;" alt="{{LatestEpisodeObj.mNameEN}}">
+                                        <i class="fas fa-play style-video-play-button-icon" style="color: #fff; width: 12.5px"></i>
+                                        <span class="style-video-duration">{{ LatestEpisodeObj.mLengthSecs|sectodur:"short"}}</span>
+                                    </a>
+                                </div>
+
+                                <div class="row">
+                                    <h6 style="margin-top: 6px;">
+                                        <a class="style-a2" style="font-size: 0.9rem" href="/anime/{{LatestEpisodeObj.mAnime.mNameEN}}/{{LatestEpisodeObj.mID}}">{{LatestEpisodeObj.mAnime.mNameEN|title|truncatechars:20}} Episode {{LatestEpisodeObj.mEpisodeNumber}}</a>
+                                    </h6>
+                                </div>
+
+                                <div class="row">
+                                    <div style="color: #707070;">{{LatestEpisodeObj.mReleaseDate|date}}</div>
+                                    <span style="margin: 0 4px; color: #707070;">•</span>
+                                    <span style="color: #707070;"> {{LatestEpisodeObj.mViews}} views</span>
+                                </div>
+                            </article>
+
+                        {% endfor %}
+                        </div>
+                    </div>
+                    <!--------------------->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content_scripts %}
+<script>
+    $("#filter-option-id-latest").click(function(){
+        //Set colors
+        $("#filter-option-id-latest").attr('style', 'color: #000 !important');
+        $("#filter-option-id-most-views").attr('style', 'color: #707070 !important');
+        $("#filter-option-id-random").attr('style', 'color: #707070 !important');
+
+        //Set hr width
+        var width = $(this).width() + 40;
+        $("#video-index-hr-id .style-menus-bar-before").css("width", width + "px");
+        $("#video-index-hr-id .style-menus-bar-before").css("margin-left", "0");
+
+        //Set visible episodes
+        $("#episode-filter-most-views-id").css('opacity', '0');
+        $("#episode-filter-most-views-id").css('visibility', 'hidden');
+        $("#episode-filter-most-views-id").hide();
+
+        $("#episode-filter-random-id").css('opacity', '0');
+        $("#episode-filter-random-id").css('visibility', 'hidden');
+        $("#episode-filter-random-id").hide();
+
+        $("#episode-filter-latest-id").show();
+        $("#episode-filter-latest-id").css('opacity', '1');
+        $("#episode-filter-latest-id").css('visibility', 'visible');
+    });
+
+    $("#filter-option-id-most-views").click(function(){
+        //Set colors
+        $("#filter-option-id-most-views").attr('style', 'color: #000 !important');
+        $("#filter-option-id-latest").attr('style', 'color: #707070 !important');
+        $("#filter-option-id-random").attr('style', 'color: #707070 !important');
+
+        //Set hr width
+        var width = $(this).width() + 40;
+        var margin = $("#filter-option-id-latest").width() + 40;
+        $("#video-index-hr-id .style-menus-bar-before").css("width", width + "px");
+        $("#video-index-hr-id .style-menus-bar-before").css("margin-left", margin + "px");
+
+        //Set visible episodes
+        $("#episode-filter-latest-id").css('opacity', '0');
+        $("#episode-filter-latest-id").css('visibility', 'hidden');
+        $("#episode-filter-latest-id").hide();
+
+        $("#episode-filter-random-id").css('opacity', '0');
+        $("#episode-filter-random-id").css('visibility', 'hidden');
+        $("#episode-filter-random-id").hide();
+
+        $("#episode-filter-most-views-id").show();
+        $("#episode-filter-most-views-id").css('opacity', '1');
+        $("#episode-filter-most-views-id").css('visibility', 'visible');
+    });
+
+    $("#filter-option-id-random").click(function(){
+        //Set colors
+        $("#filter-option-id-random").attr('style', 'color: #000 !important');
+        $("#filter-option-id-latest").attr('style', 'color: #707070 !important');
+        $("#filter-option-id-most-views").attr('style', 'color: #707070 !important');
+
+        //Set hr width
+        var width = $(this).width() + 40;
+        var margin = ($("#filter-option-id-most-views").width() + 40) + ($("#filter-option-id-latest").width() + 40);
+        $("#video-index-hr-id .style-menus-bar-before").css("width", width + "px");
+        $("#video-index-hr-id .style-menus-bar-before").css("margin-left", margin + "px");
+
+        //Set visible episodes
+        $("#episode-filter-most-views-id").css('opacity', '0');
+        $("#episode-filter-most-views-id").css('visibility', 'hidden');
+        $("#episode-filter-most-views-id").hide();
+
+        $("#episode-filter-latest-id").css('opacity', '0');
+        $("#episode-filter-latest-id").css('visibility', 'hidden');
+        $("#episode-filter-latest-id").hide();
+
+        $("#episode-filter-random-id").show();
+        $("#episode-filter-random-id").css('opacity', '1');
+        $("#episode-filter-random-id").css('visibility', 'visible');
+    });
+</script>
+
+<script>
+    $(document).ready(function(){
+        var width = $("#filter-option-id-latest").width() + 40;
+        $("#video-index-hr-id .style-menus-bar-before").css("width", width + "px");
+        $("#video-index-hr-id .style-menus-bar-before").css("margin-left", "0");
+    });
+</script>
+
+<script>
+    $(document).ready(function(){
+        var ua = navigator.userAgent.toLowerCase();
+        var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+        if(isAndroid) {
+
+          Swal.fire({
+              title: 'Have you tried our Android mobile app?',
+              text: "We noticed you are using an Android device and for a better experience we recommend the usage of our mobile app. Do you want to try it out?",
+              icon: 'question',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              cancelButtonText: 'No, thanks',
+              confirmButtonText: 'Yes, take me there!'
+          }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.href = "http://google.com";
+              }
+          });
+        }
+    });
+</script>
+{% endblock %}

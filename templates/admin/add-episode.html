@@ -1,0 +1,142 @@
+{% extends 'admin/base.html' %}
+
+{% block episode %}
+active
+{% endblock %}
+
+{% block add_episode %}
+active
+{% endblock %}
+
+{% block open_episode %}
+menu-open
+{% endblock %}
+
+{% block content_main %}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Add New Episode</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{%  url 'admin' %}">Dashboard</a></li>
+          <li class="breadcrumb-item">Episode</li>
+          <li class="breadcrumb-item active">Add</li>
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- left column -->
+      <div class="col-md-6" style="flex: 0 0 100%; max-width: 100%;">
+        <!-- general form elements -->
+        <div class="card card-primary">
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form method="post" enctype="multipart/form-data">{% csrf_token %}
+              <div class="card-body">
+            <div class="row">
+                <div class="col-sm-6">
+                   <div class="form-group">
+                     <label>Name in English<b style="color: red;">*</b></label>
+                     <input type="text" class="form-control" placeholder="Name in English" name="nameEn" required>
+                   </div>
+                 </div>
+
+                 <div class="col-sm-6">
+                   <div class="form-group">
+                     <label>Name in Japanese</label>
+                     <input type="text" class="form-control" placeholder="Name in Japanese" name="nameJP">
+                   </div>
+                 </div>
+           </div>
+
+           <div class="row">
+              <div class="col-sm-6">
+                 <div class="form-group">
+                    <label for="length">Length<b style="color: red;">*</b></label>
+                     <input type="time" id="length" class="form-control" step='1' name="length" min="00:00:00" max="20:00:00" required>
+                 </div>
+              </div>
+
+               <div class="col-sm-6">
+                 <div class="form-group">
+                    <label for="epi">Episode Number<b style="color: red;">*</b></label>
+                     <input type="number" id="epi" class="form-control" step='1' name="epi" min="1" max="999999" required>
+                 </div>
+              </div>
+           </div>
+
+          <div class="row">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Release Date<b style="color: red;">*</b></label>
+                  <input type="date" class="form-control" id="reldate" name="reldate" min="1500-01-01" required>
+                </div>
+              </div>
+
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label>Release Time</label>
+                  <input type="time" id="reltime" class="form-control" name="reltime" min="00:00" max="23:00">
+                </div>
+              </div>
+          </div>
+
+              <div class="form-group">
+                  <label>Video File Link<b style="color: red;">*</b></label>
+                  <input type="text" class="form-control" name="videoFile" placeholder="https://host.com/example.mp4" required>
+              </div>
+
+              <div class="form-group">
+                  <label>Thumbnail<b style="color: red;">*</b></label>
+                  <input type="text" class="form-control" name="thumbnail" placeholder="https://host.com/image.png" required>
+              </div>
+
+              <div class="form-group" style="margin-top: 16px;">
+                    <label>Anime<b style="color: red;">*</b></label>
+                    <select class="custom-select" name="anime" required>
+                        {% for animeObj in animeObjs %}
+                            <option value="{{animeObj.mNameEN}}">{{animeObj.mNameEN|title}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                  {% for message in messages %}
+                {% if message.extra_tags == 'error' %}
+                    <p style="color: red; margin-top: 10px;">{{message}}</p>
+                {% else %}
+                    <p style="color: green; margin-top: 10px;">{{message}}</p>
+                {% endif %}
+            {% endfor %}
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer" style="margin-top: 25px;">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+        </div>
+        <!-- /.card -->
+      </div>
+    </div>
+    <!-- /.row -->
+  </div><!-- /.container-fluid -->
+</section>
+{% endblock %}
+
+{% block content_script %}
+<script>
+$(function () {
+  bsCustomFileInput.init();
+});
+</script>
+{% endblock %}

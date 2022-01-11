@@ -1,0 +1,93 @@
+{% extends 'admin/base.html' %}
+
+{% block subtitle %}active{% endblock %}
+
+{% block edit_subtitle %}active{% endblock %}
+
+{% block open_subtitle %}menu-open{% endblock %}
+
+{% block content_main %}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>All Subtitle</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{%  url 'admin' %}">Dashboard</a></li>
+          <li class="breadcrumb-item">Subtitle</li>
+          <li class="breadcrumb-item active">All</li>
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <h2 class="text-center display-4">Subtitle Search</h2>
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <form role="search" method="get" action="">
+                    <div class="input-group">
+                        <input type="search" name="s" class="form-control form-control-lg" placeholder="Type the episode name here">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-lg btn-default">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main content -->
+<section class="content" style="margin-top: 60px;">
+  <div class="container-fluid">
+
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body table-responsive p-0">
+            <table class="table table-hover text-nowrap">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Language</th>
+                  <th>Episode</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for obj in subtObjs %}
+                    <tr class='clickable-row' data-href='/admin/subtitle/edit/{{ obj.mID }}' style="cursor: pointer;">
+                      <td>{{ obj.mID }}</td>
+                      <td>{{ obj.mLanguage }}</td>
+                      <td>{{ obj.mEpisode.mID }} - {{ obj.mEpisode.mAnime.mNameEN|title }} Episode {{ obj.mEpisode.mEpisodeNumber }}: {{ obj.mEpisode.mNameEN|title }}</td>
+                    </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+    </div>
+    <!-- /.row -->
+  </div><!-- /.container-fluid -->
+</section>
+{% endblock %}
+
+{% block content_script %}
+<script>
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends 'admin/base.html' %}
+
+{% block mylist %}active{% endblock %}
+
+{% block edit_mylist %}active{% endblock %}
+
+{% block open_mylist %}menu-open{% endblock %}
+
+{% block content_main %}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Edit MyList Item {{ mylistObj.mID }}</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{%  url 'admin' %}">Dashboard</a></li>
+          <li class="breadcrumb-item">Anime</li>
+          <li class="breadcrumb-item"><a href="{%  url 'admin-anime-mylist-all' %}">My List</a></li>
+          <li class="breadcrumb-item">Edit</li>
+          <li class="breadcrumb-item active">{{ mylistObj.mID }}</li>
+        </ol>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- left column -->
+      <div class="col-md-6" style="flex: 0 0 100%; max-width: 100%;">
+        <!-- general form elements -->
+        <div class="card card-primary">
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form method="post" enctype="multipart/form-data">{% csrf_token %}
+              <div class="card-body">
+
+              <div class="form-group" style="margin-top: 16px;">
+                    <label>User<b style="color: red;">*</b></label>
+                    <div class="selecUser">
+                        <select class="custom-select" name="user" required>
+                            {% for userObj in userObjs %}
+                                <option value="{{ userObj.username }}">{{ userObj.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+              <div class="form-group" style="margin-top: 16px;">
+                    <label>Anime<b style="color: red;">*</b></label>
+                    <div class="selecAnime">
+                        <select class="custom-select" name="anime" required>
+                            {% for animeObj in animeObjs %}
+                                <option value="{{ animeObj.mNameEN }}">{{ animeObj.mNameEN|title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+            {% for message in messages %}
+                {% if message.extra_tags == 'error' %}
+                    <p style="color: red; margin-top: 10px;">{{message}}</p>
+                {% else %}
+                    <p style="color: green; margin-top: 10px;">{{message}}</p>
+                {% endif %}
+            {% endfor %}
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer" style="margin-top: 25px;">
+              <button type="submit" name="save" value="save" class="btn btn-primary" style="margin-right: 87.5%">Save Item</button>
+              <button type="submit" name="delete" value="delete" class="btn btn-primary" style="background-color: #ff3333; border-color: #ff3333;">Delete Item</button>
+            </div>
+          </form>
+        </div>
+        <!-- /.card -->
+      </div>
+    </div>
+    <!-- /.row -->
+  </div><!-- /.container-fluid -->
+</section>
+{% endblock %}
+
+{% block content_script %}
+<script>
+$("div.selecAnime select").val("{{ mylistObj.mAnime.mNameEN }}").change();
+$("div.selecUser select").val("{{ mylistObj.mUser.username }}").change();
+</script>
+{% endblock %}

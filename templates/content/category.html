@@ -1,0 +1,106 @@
+{% extends 'content/base.html' %}
+{% load static %}
+
+{% block content_entire %}
+
+<div aria-label="Anime Pages">
+  <ul class="pagination pagination-lg justify-content-center">
+    <li class="page-item {% if objs.has_previous is False %}disabled{% endif %}">
+      <a class="page-link" style="border: 1px solid #dee2e6;" {% if objs.has_previous %}href="{{ request.path }}?page={{ objs.previous_page_number }}"{% endif %} tabindex="-1">Previous</a>
+    </li>
+    {% for n in p.page_range %}
+        {% if objs.number == n %}
+            <li class="page-item style-very-active"><a class="page-link" style="border: 1px solid #dee2e6;" href="{{ request.path }}?page={{ n }}">{{ n }}</a></li>
+        {% elif n > objs.number|add:-3 and n < objs.number|add:3 %}
+            <li class="page-item"><a class="page-link" style="border: 1px solid #dee2e6;" href="{{ request.path }}?page={{ n }}">{{ n }}</a></li>
+        {% endif %}
+    {% endfor %}
+
+    <li class="page-item {% if objs.has_next is False %}disabled{% endif %}">
+      <a class="page-link" style="border: 1px solid #dee2e6;" {% if objs.has_next %}href="{{ request.path }}?page={{ objs.next_page_number }}"{% endif %}>Next</a>
+    </li>
+  </ul>
+</div>
+
+
+<h5 style="margin-left: 2%;">Has total {{ qtdAnimes }} animes</h5>
+<hr class="style-menus-hr" style="margin-bottom: 2%;">
+
+<div class="container-fluid">
+
+    {% for obj in objs %}
+        {% if forloop.counter0 == 0 %}
+            <div class="row" style="margin-bottom: 5%;">
+        {% elif forloop.counter0|divisibleby:"4" == True %}
+            </div>
+            <div class="row" style="margin-bottom: 5%;">
+        {% endif %}
+
+
+        <article class="col-sm text-center">
+
+            <a href="/anime/{{obj.mNameEN}}">
+                <img style="border-radius: 5px; max-width: 268.2px;" src="{{obj.mThumbnail}}" alt="{{obj.mNameEN}}" loading="lazy" />
+            </a>
+
+            <div style="margin-top: 2%;" class="container-fluid">
+                <div class="row">
+                    <h6 class="style-anime-title"><a class="style-anime-a" href="/anime/{{obj.mNameEN}}">{{obj.mNameEN|title}}{% if obj.mNameJP %} ({{obj.mNameJP|title}}){% endif %}</a></h6>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-sm">
+                        <div>
+                            {% for cat in obj.mCategories.all|slice:":3" %}
+
+                                {% if forloop.counter > 1 %}
+                                    <i style="color: #7d7d7d;" class="style-bullets fa fa-circle"></i>
+                                {% endif %}
+
+                                <a href="/category/{{ cat.mCategoryName }}" class="style-anime-option style-anime-a">{{ cat.mCategoryName|title }}</a>
+
+                                {% if forloop.counter >= 3 %}
+                                    <i style="color: #7d7d7d;" class="style-bullets fa fa-circle"></i>
+                                    <a href="/category" class="style-anime-option style-anime-a">...</a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <div>
+                            <span class="style-anime-option">{{ obj.mEpisodeCount }} episodes</span>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </article>
+
+    {% endfor %}
+    </div>
+
+</div>
+
+
+<div aria-label="Anime Pages">
+  <ul class="pagination pagination-lg justify-content-center">
+    <li class="page-item {% if objs.has_previous is False %}disabled{% endif %}">
+      <a class="page-link" style="border: 1px solid #dee2e6;" {% if objs.has_previous %}href="{{ request.path }}?page={{ objs.previous_page_number }}"{% endif %} tabindex="-1">Previous</a>
+    </li>
+    {% for n in p.page_range %}
+        {% if objs.number == n %}
+            <li class="page-item style-very-active"><a class="page-link" style="border: 1px solid #dee2e6;" href="{{ request.path }}?page={{ n }}">{{ n }}</a></li>
+        {% elif n > objs.number|add:-3 and n < objs.number|add:3 %}
+            <li class="page-item"><a class="page-link" style="border: 1px solid #dee2e6;" href="{{ request.path }}?page={{ n }}">{{ n }}</a></li>
+        {% endif %}
+    {% endfor %}
+
+    <li class="page-item {% if objs.has_next is False %}disabled{% endif %}">
+      <a class="page-link" style="border: 1px solid #dee2e6;" {% if objs.has_next %}href="{{ request.path }}?page={{ objs.next_page_number }}"{% endif %}>Next</a>
+    </li>
+  </ul>
+</div>
+
+{% endblock %}
